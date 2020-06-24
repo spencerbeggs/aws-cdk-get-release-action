@@ -1,13 +1,13 @@
 {
 	"compilerOptions": {
 		"target": "ES2019",
+		"module": "ESNext",
 		"moduleResolution": "node",
-		"module": "commonjs",
 		"lib": ["ESNext"],
 		"esModuleInterop": true,
-		"declaration": true,
+		"allowSyntheticDefaultImports": true,
 		"strict": true,
-		"noImplicitAny": true,
+		"noImplicitAny": false,
 		"strictNullChecks": false,
 		"noImplicitThis": true,
 		"alwaysStrict": true,
@@ -20,13 +20,8 @@
 		"inlineSources": true,
 		"experimentalDecorators": true,
 		"strictPropertyInitialization": false,
-		"outDir": "dist",
-		"baseUrl": "./",
 		"pretty": false,
-		"paths": {
-			"@src/*": ["src/*"],
-			"@lib/*": ["lib/*"]
-		}
+		"resolveJsonModule": true
 	},
 	"exclude": ["node_modules", "dist", ".cache", ".vscode", ".github", ".dependabot"]
 }

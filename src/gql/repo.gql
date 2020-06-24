@@ -1,0 +1,11 @@
+query {
+	repository(owner: "octokit", name: "graphql.js") {
+		issues(last: 3) {
+			edges {
+				node {
+					title
+				}
+			}
+		}
+	}
+}

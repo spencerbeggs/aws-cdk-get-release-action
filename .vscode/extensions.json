@@ -4,6 +4,7 @@
 		"nhoizey.gremlins",
 		"esbenp.prettier-vscode",
 		"amatiasq.sort-imports",
-		"DavidAnson.vscode-markdownlint"
+		"DavidAnson.vscode-markdownlint",
+		"kumar-harsh.graphql-for-vscode"
 	]
 }

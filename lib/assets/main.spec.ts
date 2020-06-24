@@ -1,4 +1,4 @@
-import { main } from "@src/index";
+import { main } from "../../src/main";
 
 describe("main()", (): void => {
 	it("resolves the string 'Hello, world!", async () => {

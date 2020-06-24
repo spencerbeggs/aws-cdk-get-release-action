@@ -1,17 +1,7 @@
 {
-	"presets": [
-		[
-			"@babel/preset-env",
-			{
-				"modules": "commonjs",
-				"targets": {
-					"node": true
-				}
-			}
-		]
-	],
+	"presets": [["@babel/preset-typescript", { "allowNamespaces": true }]],
 	"plugins": [
-		"@babel/plugin-transform-typescript",
+		"macros",
 		"@babel/proposal-class-properties",
 		"@babel/proposal-object-rest-spread",
 		"@babel/plugin-proposal-optional-chaining",
