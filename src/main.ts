@@ -1,14 +1,13 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import * as process from "process";
+import { env } from "process";
+import console from "dev-console.macro";
 
 const gql = (content: TemplateStringsArray): string => String.raw(content);
-export async function main(): Promise<void> {
+export async function main(): Promise<unknown> {
 	try {
-		const { GITHUB_TOKEN } = process.env;
-		console.log(GITHUB_TOKEN);
-		const token = GITHUB_TOKEN ?? core.getInput("token");
-		const octokit = github.getOctokit(token);
+		const { GITHUB_TOKEN } = env;
+		const octokit = github.getOctokit(GITHUB_TOKEN);
 		const { graphql } = octokit;
 		const result = await graphql(
 			gql`
@@ -24,11 +23,15 @@ export async function main(): Promise<void> {
 					}
 				}
 			`,
-			{},
+			{
+				headers: {
+					authorization: GITHUB_TOKEN,
+				},
+			},
 		);
 		console.log(result);
+		return result;
 	} catch (err) {
-		console.log(err);
 		core.setFailed(err.message);
 		throw err;
 	}

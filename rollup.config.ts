@@ -10,7 +10,7 @@ const { APP_ENV } = process.env;
 export default {
 	input: pkg.main.replace("index", APP_ENV === "local" ? "test" : "index"),
 	output: [{ dir: "./dist", format: "cjs", sourcemap: true }],
-	external: ["dotenv", "process", ...Object.keys(pkg.dependencies || {})],
+	external: ["dotenv", ...Object.keys(pkg.dependencies || {})],
 	watch: {
 		include: "src/**",
 	},
@@ -21,7 +21,9 @@ export default {
 			// declarationDir: "dist",
 		}),
 		babel({ extensions, include: ["src/**/*"], babelHelpers: "bundled" }),
-		resolve(),
+		resolve({
+			preferBuiltins: true,
+		}),
 		commonjs(),
 		//sourceMaps(),
 	],

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { pathsToModuleNameMapper } = require("ts-jest/utils");
-const { compilerOptions } = require("./tsconfig");
-const babelConfig = require("./babel.config.json");
+const { jsWithBabel: tsjPreset } = require("ts-jest/presets");
+const babelConfig = require("./.babelrc.cjs");
 
 module.exports = {
 	preset: "ts-jest/presets/js-with-ts",
@@ -9,13 +8,13 @@ module.exports = {
 	globals: {
 		"ts-jest": {
 			packageJson: "package.json",
-			tsConfig: "tsconfig.json",
+			tsConfig: "tsconfig.jest.json",
 			babelConfig: babelConfig,
 		},
 	},
 	setupFiles: ["./jest.env.js"],
 	transform: {
-		"^.+\\.tsx?$": "babel-jest",
+		...tsjPreset.transform,
 	},
 	moduleDirectories: ["node_modules"],
 	testMatch: null,
@@ -27,5 +26,4 @@ module.exports = {
 	maxConcurrency: 10,
 	cacheDirectory: ".cache/jest",
 	roots: ["<rootDir>/src/", "<rootDir>/tests/"],
-	moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
 };

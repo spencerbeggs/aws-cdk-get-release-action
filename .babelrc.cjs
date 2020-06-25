@@ -1,5 +1,16 @@
-{
-	"presets": [["@babel/preset-typescript", { "allowNamespaces": true }]],
+module.exports = {
+	"presets": [
+		["@babel/preset-typescript", { "allowNamespaces": true }],
+		[
+			"@babel/preset-env",
+			{
+				"modules": process.env.APP_ENV === "jest" ? "commonjs" : false,
+				"targets": {
+					"node": true
+				}
+			}
+		]
+	],
 	"plugins": [
 		"macros",
 		"@babel/proposal-class-properties",
@@ -10,4 +21,4 @@
 	],
 	"comments": true,
 	"sourceType": "unambiguous"
-}
+};
