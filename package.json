@@ -60,7 +60,7 @@
 		"jest": "^26.0.1",
 		"jest-transform-css": "^2.0.0",
 		"lint-staged": "^10.2.7",
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.19",
 		"postcss": "^7.0.32",
 		"prettier": "^2.0.5",
 		"source-map-support": "^0.5.19",
