@@ -1,0 +1,64 @@
+name: "release"
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+    branches:
+      - "main"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      repo: ${{ steps.meta.outputs.repo }}
+      tag: ${{ steps.meta.outputs.tag }}
+      package_name: ${{ steps.meta.outputs.package_name }}
+      zip_file: ${{ steps.meta.outputs.zip_file }}
+      tar_file: ${{ steps.meta.outputs.tar_file }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup Node
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "12"
+      - name: meta
+        id: meta
+        shell: bash
+        run: |
+          REPO=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
+          TAG=$(echo ${GITHUB_REF#refs/tags/})
+          PACKAGE="$REPO-$TAG"
+          echo ::set-output name=repo::"$REPO"
+          echo ::set-output name=tag::"$TAG"
+          echo ::set-output name=package_name::"$PACKAGE"
+          echo ::set-output name=zip_file::"$PACKAGE.zip"
+          echo ::set-output name=tar_file::"$PACKAGE.tar.gz"
+      - name: build
+        run: |
+          yarn install --production=false --frozen-lockfile
+          yarn build
+      - name: zip
+        uses: papeloto/action-zip@v1
+        with:
+          files: dist
+          recursive: true
+          dest: release.zip
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_name: v${{ github.ref }}
+          tag_name: ${{ github.ref }}
+          draft: true
+      - name: upload release
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.workspace }}/release.zip
+          asset_name: ${{ steps.meta.outputs.zip_file }}
+          asset_content_type: application/zip

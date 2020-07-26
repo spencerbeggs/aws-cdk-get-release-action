@@ -1,38 +1,78 @@
-import * as core from "@actions/core";
-import * as github from "@actions/github";
-import { env } from "process";
-import console from "dev-console.macro";
+import {
+	CdkReleaseAssets,
+	CdkReleaseAssetsQuery,
+	CdkReleaseAssetsQueryVariables,
+	CdkReleases,
+	CdkReleasesQuery,
+	MyReleases,
+	MyReleasesQuery,
+	MyReleasesQueryVariables,
+	Release,
+	ReleaseAsset,
+} from "./generated/graphql";
+import { getInput, setFailed } from "@actions/core";
 
-const gql = (content: TemplateStringsArray): string => String.raw(content);
+import { clean } from "semver";
+import { client } from "./client";
+import { env } from "process";
+import { inspect } from "util";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function debug(obj: any): void {
+	if (env.APP_ENV === "debug") {
+		console.log(inspect(obj, false, 7, true));
+	}
+}
+
+async function getCdkReleasesAssets(tagName: string): Promise<ReleaseAsset[]> {
+	const version = clean(tagName);
+	const result = await client.query<CdkReleaseAssetsQuery, CdkReleaseAssetsQueryVariables>({
+		query: CdkReleaseAssets,
+		variables: {
+			tagName,
+		},
+	});
+	const assets = result.data.repository.release.releaseAssets.edges.map((edge) => edge.node as ReleaseAsset);
+	const downloadUrl = assets.reduce((acc, asset) => {
+		if (asset.name === `asw-cdk-${version}.zip`) {
+			acc = asset.url;
+		}
+		return acc;
+	}, null);
+	return result.data.repository.release.releaseAssets.edges.map((edge) => edge.node as ReleaseAsset);
+}
+
+async function getCdkReleases(): Promise<Release[]> {
+	const result = await client.query<CdkReleasesQuery>({
+		query: CdkReleases,
+	});
+	return result.data.repository.releases.edges.map((edge) => edge.node as Release);
+}
+
+async function getMyReleases(): Promise<Release[]> {
+	const [owner, name] = env.GITHUB_REPOSITORY.split("/");
+	const result = await client.query<MyReleasesQuery, MyReleasesQueryVariables>({
+		query: MyReleases,
+		variables: {
+			owner,
+			name,
+		},
+	});
+	return result.data.repository.releases.edges.map((edge) => edge.node as Release);
+}
+
 export async function main(): Promise<unknown> {
 	try {
-		const { GITHUB_TOKEN } = env;
-		const octokit = github.getOctokit(GITHUB_TOKEN);
-		const { graphql } = octokit;
-		const result = await graphql(
-			gql`
-				query {
-					repository(owner: "octokit", name: "graphql.js") {
-						issues(last: 3) {
-							edges {
-								node {
-									title
-								}
-							}
-						}
-					}
-				}
-			`,
-			{
-				headers: {
-					authorization: GITHUB_TOKEN,
-				},
-			},
-		);
-		console.log(result);
+		const tagName = env.CDK_RELEASE_TAG ?? getInput("tag");
+		const asset = await getCdkReleasesAssets(tagName);
+		debug(asset);
+		const mine = await getMyReleases();
+		debug(mine);
+		const result = await getCdkReleases();
+		debug(result);
 		return result;
 	} catch (err) {
-		core.setFailed(err.message);
+		setFailed(err.message);
 		throw err;
 	}
 }

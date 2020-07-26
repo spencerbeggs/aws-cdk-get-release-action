@@ -5,7 +5,10 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Test Modules",
-			"program": "${workspaceFolder}/dist/test.js"
+			"skipFiles": ["<node_internals>/**"],
+			"program": "${workspaceRoot}/dist/index.js",
+			"envFile": "${workspaceRoot}/.env",
+			"outputCapture": "console"
 		}
 	]
 }

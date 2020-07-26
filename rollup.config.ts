@@ -1,16 +1,17 @@
-import resolve from "@rollup/plugin-node-resolve";
+import babel from "@rollup/plugin-babel";
+import builtins from "builtin-modules";
 import commonjs from "@rollup/plugin-commonjs";
-import typescript from "@rollup/plugin-typescript";
+import { join } from "path";
 import json from "@rollup/plugin-json";
 import pkg from "./package.json";
-import babel from "@rollup/plugin-babel";
-import * as process from "process";
+import resolve from "@rollup/plugin-node-resolve";
+import typescript from "@rollup/plugin-typescript";
+
 const extensions = [".js", ".jsx", ".ts", ".tsx"];
-const { APP_ENV } = process.env;
 export default {
-	input: pkg.main.replace("index", APP_ENV === "local" ? "test" : "index"),
+	input: pkg.main,
 	output: [{ dir: "./dist", format: "cjs", sourcemap: true }],
-	external: ["dotenv", ...Object.keys(pkg.dependencies || {})],
+	external: [...builtins, ...Object.keys(pkg.dependencies || {})],
 	watch: {
 		include: "src/**",
 	},
@@ -22,6 +23,7 @@ export default {
 		}),
 		babel({ extensions, include: ["src/**/*"], babelHelpers: "bundled" }),
 		resolve({
+			rootDir: join(process.cwd(), ".."),
 			preferBuiltins: true,
 		}),
 		commonjs(),
