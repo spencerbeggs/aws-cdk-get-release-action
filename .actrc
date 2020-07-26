@@ -1,4 +1,0 @@
---secret-file ../.secrets
--C dist
--W ../workflow
--e ../workflow/event.json
