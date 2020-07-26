@@ -7,7 +7,10 @@
 	"[javascript]": {
 		"editor.formatOnSave": false
 	},
+<<<<<<< HEAD
 	"sort-imports.on-save": false,
+=======
+>>>>>>> 0.0.1
 	"[typescript]": {
 		"editor.formatOnSave": false
 	},
@@ -23,7 +26,10 @@
 	"deno.enable": false,
 	"yaml.format.enable": true,
 	"[yaml]": {
-		"editor.insertSpaces": false
+		"editor.insertSpaces": true,
+		"editor.formatOnSave": true
 	},
-	"typescript.referencesCodeLens.enabled": true
+	"typescript.referencesCodeLens.enabled": true,
+	"graphqlForVSCode.nodePath": "node_modules",
+	"stylelint.validate": ["css", "scss"]
 }

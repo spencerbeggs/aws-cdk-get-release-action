@@ -4,4 +4,9 @@ dist
 .DS_Store
 .env
 yarn-error.log
+<<<<<<< HEAD
 .cache
+=======
+.cache
+.secrets
+>>>>>>> 0.0.1

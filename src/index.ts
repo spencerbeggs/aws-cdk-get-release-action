@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export async function main(): Promise<string> {
 	return "Hello, world!";
 }
@@ -16,3 +17,7 @@ export const babel: BabelTest = {
 	},
 	nullishCheck: (val) => val ?? "nullish",
 };
+=======
+import { main } from "./main";
+main();
+>>>>>>> 0.0.1

@@ -1,0 +1,13 @@
+query MyReleases($owner: String!, $name: String!) {
+	repository(owner: $owner, name: $name) {
+		releases(last: 100) {
+			edges {
+				node {
+					tag {
+						name
+					}
+				}
+			}
+		}
+	}
+}

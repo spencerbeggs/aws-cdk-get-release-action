@@ -5,7 +5,11 @@
 	"printWidth": 125,
 	"overrides": [
 		{
+<<<<<<< HEAD
 			"files": [".prettierrc", ".eslintrc", ".babelrc", "package.json"],
+=======
+			"files": [".prettierrc", ".eslintrc", ".babelrc", "package.json", ".gqlconfig", ".babel-plugin-macrosrc"],
+>>>>>>> 0.0.1
 			"options": { "parser": "json" }
 		}
 	]
