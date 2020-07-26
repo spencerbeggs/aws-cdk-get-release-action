@@ -14,7 +14,7 @@
 		"clean": "rm -rf dist",
 		"debug": "node --inspect dist/index.js",
 		"gql:fetch-schema": "graphql get-schema --project prod",
-		"test": "NODE_ENV=production APP_ENV=jest jest",
+		"test": "NODE_ENV=production APP_ENV=jest jest --setupFiles dotenv/config",
 		"bootstrap": "ts-node lib/bootstrap.ts init",
 		"build": "yarn clean && NODE_ENV=production yarn rollup && yarn package && cd dist && yarn install --production=true --pure-lockfile",
 		"lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx,.json}' --quiet --fix --ignore-path .eslintignore",
