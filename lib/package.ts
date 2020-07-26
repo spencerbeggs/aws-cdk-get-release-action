@@ -11,11 +11,8 @@ async function main(): Promise<void> {
 	pkg.main = pkg.main.replace("src/", "").replace(".ts", ".js");
 	pkg.types = pkg.main.replace(".js", ".d.ts");
 	await writeJson(makePath("../dist/package.json"), pkg, { spaces: "\t" });
-<<<<<<< HEAD
-=======
 	await copy(makePath("../yarn.lock"), makePath("../dist/yarn.lock"));
 	await copy(makePath("../src/action.yml"), makePath("../dist/action.yml"));
->>>>>>> 0.0.1
 	await copy(makePath("../README.md"), makePath("../dist/README.md"));
 	await copy(makePath("../LICENSE"), makePath("../dist/LICENSE"));
 }
