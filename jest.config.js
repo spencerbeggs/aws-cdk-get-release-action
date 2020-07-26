@@ -13,8 +13,8 @@ module.exports = {
 	},
 	transform: {
 		"^.+\\.tsx?$": "ts-jest",
-		".+\\.(css|styl|less|sass|scss)$": "jest-transform-css",
 	},
+	setupFiles: ["./jest.env.js"],
 	moduleDirectories: ["node_modules"],
 	testMatch: null,
 	testRegex: "(/(tests|src|lib)/.*(.(test|spec)).(j|t)sx?)$",
